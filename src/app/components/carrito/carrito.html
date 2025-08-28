@@ -1,0 +1,26 @@
+
+<mat-toolbar color="primary">
+  <button mat-button routerLink="/libros1">
+    <mat-icon>arrow_back</mat-icon>
+    Seguir Comprando
+  </button>
+  <span class="spacer"></span>
+  <span>Carrito</span>
+
+  <button mat-button [matMenuTriggerFor]="mas">Mas</button>
+  <mat-menu #mas="matMenu">
+    <button mat-menu-item routerLink="/categorias"> categorias </button>
+    <button mat-menu-item routerLink="/autores"> autores </button>
+    <button mat-menu-item routerLink="/clientes">clientes</button>
+    <button mat-menu-item routerLink="/libros">libros</button>
+    
+  </mat-menu>
+</mat-toolbar>
+<ng-template #vacio>
+  <div class="empty">
+    <p>Tu Carrito esta Vacio</p>
+    <a mat-stroked-button color="primary" routerLink="/libros">
+      <mat-icon> shopping_bag </mat-icon>Ver Libros</a
+    >
+  </div>
+</ng-template>

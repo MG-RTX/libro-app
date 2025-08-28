@@ -10,7 +10,7 @@ import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-categoria',
   standalone: false,
-  
+
   templateUrl: './categoria.html',
   styleUrls: ['./categoria.css']
 })
