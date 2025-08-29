@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Libro } from '../model/libro.model';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +25,17 @@ export class LibroService {
   }
 
   update(id: number, idCategoria: number, idAutor: number, libro: Libro): Observable<Libro> {
-    return this.http.put<Libro>(
-      `${this.baseUrl}/${id}?idCategoria=${idCategoria}&idAutor=${idAutor}`, 
-      libro
-    );
-  }
+  // Use HttpParams for cleaner URL construction
+  const params = new HttpParams()
+    .set('idCategoria', idCategoria.toString())
+    .set('idAutor', idAutor.toString());
+
+  return this.http.put<Libro>(
+    `${this.baseUrl}/${id}`,
+    libro,
+    { params }
+  );
+}
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);

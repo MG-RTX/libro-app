@@ -1,21 +1,22 @@
 import { HttpClient } from '@angular/common/http';  
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Autor }  from '../model/autor.model';
+import { Autor } from '../model/autor.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AutorService {
-    private baseUrl = 'http://localhost:8080/autor';  // URL to web servic
+    private baseUrl = 'http://localhost:8080/autor';  // Fixed typo
+
     constructor(private http: HttpClient) { }
 
-    findAll(): Observable<Autor[]>{
+    findAll(): Observable<Autor[]> {
         return this.http.get<Autor[]>(this.baseUrl);
     }
 
     findOne(id: number): Observable<Autor> {
-        return this.http.get<Autor>(this.baseUrl + '/' + id);
+        return this.http.get<Autor>(`${this.baseUrl}/${id}`);
     }
 
     save(autor: Autor): Observable<Autor> {
@@ -23,11 +24,10 @@ export class AutorService {
     }
 
     update(id: number, autor: Autor): Observable<Autor> {
-        return this.http.put<Autor>(`${this.baseUrl} /${id} `,autor);
+        return this.http.put<Autor>(`${this.baseUrl}/${id}`, autor); // Removed spaces
     }
 
-    delete(id: number): Observable<void>{
+    delete(id: number): Observable<void> {
         return this.http.delete<void>(`${this.baseUrl}/${id}`);
     }
-
 }

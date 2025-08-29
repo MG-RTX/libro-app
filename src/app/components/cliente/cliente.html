@@ -1,39 +1,38 @@
 <mat-toolbar color="primary" class="topbar">
     <a mat-button class="brand" routerLink="/libros1">
         <mat-icon class="brand-logo" fontSet="material-icons-outlined" fontIcon="menu_book"></mat-icon>
-        <span class="brand-name" > Libreria ABC S.A</span>
+        <span class="brand-name"> Libreria ABC S.A</span>
     </a>
 
-    <a mat-button routerLink="/categorias" routerLink="active">
+    <a mat-button routerLink="/categorias" routerLinkActive="active">
         <mat-icon fontSet="material-icons-outlined">category</mat-icon>
         <span> Categorias</span>
     </a>
 
-    <a mat-button routerLink="/autores" routerLink="active">
+    <a mat-button routerLink="/autores" routerLinkActive="active">
         <mat-icon fontSet="material-icons-outlined">person</mat-icon>
         <span> Autores</span>
     </a>
 
-    <a mat-button routerLink="/cliente" routerLink="active">
+    <a mat-button routerLink="/clientes" routerLinkActive="active">
         <mat-icon fontSet="material-icons-outlined">groups</mat-icon>
         <span> Cliente</span>
     </a>
 
-    <a mat-button routerLink="/libros" routerLink="active">
+    <a mat-button routerLink="/libros" routerLinkActive="active">
         <mat-icon fontSet="material-icons-outlined">library_books</mat-icon>
         <span> Libro </span>
     </a>
     <span class="spacer"></span>
 
-    <a mat-stroked-button color="accent" routerLink="/carrito">
-        <mat-icon fontSet="material-icons-outlined">shopping_cart</mat-icon>
+    <a mat-stroked-button color="accent" routerLink="/carrito" routerLinkActive="active">
+        <mat-icon fontSet="material-icons-outlined">shopping_cart"></mat-icon>
         <span> Carrito</span>
     </a>
 
 </mat-toolbar>
 
-
-<div class="container mt -4" #formularioCliente>
+<div class="container mt-4" #formularioCliente>
 
     <h2>{{ editar ?'Editar Cliente' : 'Agregar Cliente'}}</h2>
 
@@ -44,41 +43,45 @@
                     name="cedula" required #cedula="ngModel"
                     [ngClass]="{'is-invalid':cedula.invalid && cedula.touched}">
             </div>
-        </div>
-        <div class="col-md-4 mb-2">
-            <input class="form-control" type="text" placeholder="Nombre" [(ngModel)]="cliente.nombre" name="nombre"
-                required #nombre="ngModel" [ngClass]="{'is-invalid': nombre.invalid && nombre.touched}">
+        
+            <div class="col-md-4 mb-2">
+                <input class="form-control" type="text" placeholder="Nombre" [(ngModel)]="cliente.nombre" name="nombre"
+                    required #nombre="ngModel" [ngClass]="{'is-invalid': nombre.invalid && nombre.touched}">
+            </div>
+
+            <div class="col-md-4 mb-2">
+                <input class="form-control" type="text" placeholder="Apellido" [(ngModel)]="cliente.apellido"
+                    name="apellido" required #apellido="ngModel"
+                    [ngClass]="{'is-invalid': apellido.invalid && apellido.touched}">
+            </div>
         </div>
 
-        <div class="col-md-4 mb-2">
-            <input class="form-control" type="text" placeholder="Apellido" [(ngModel)]="cliente.apellido"
-                name="apellido" required #apellido="ngModel"
-                [ngClass]="{'is-invalid': apellido.invalid && apellido.touched}">
-        </div>
+        <div class="row">
+            <div class="col-md-6 mb-2">
+                <input class="form-control" type="text" placeholder="Direccion" [(ngModel)]="cliente.direccion"
+                    name="direccion" required #direccion="ngModel"
+                    [ngClass]="{'is-invalid': direccion.invalid && direccion.touched}">
+            </div>
 
-        <div class="col-md-6 mb-2">
-            <input class="form-control" type="text" placeholder="Direccion" [(ngModel)]="cliente.direccion"
-                name="direccion" required #direccion="ngModel"
-                [ngClass]="{'is-invalid': direccion.invalid && direccion.touched}">
-        </div>
+            <div class="col-md-3 mb-2">
+                <input class="form-control" type="number" placeholder="Telefono" [(ngModel)]="cliente.telefono"
+                    name="telefono" required #telefono="ngModel"
+                    [ngClass]="{'is-invalid': telefono.invalid && telefono.touched}">
+            </div>
 
-        <div class="col-md-3 mb-2">
-            <input class="form-control" type="number" placeholder="Telefono" [(ngModel)]="cliente.telefono"
-                name="Telefono" required #telefono="ngModel"
-                [ngClass]="{'is-invalid': telefono.invalid && telefono.touched}">
+            <div class="col-md-3 mb-2">
+                <input class="form-control" type="email" placeholder="Correo" [(ngModel)]="cliente.correo" name="correo"
+                    required #correo="ngModel" [ngClass]="{'is-invalid': correo.invalid && correo.touched}">
+            </div>
         </div>
-
-        <div class="col-md-3 mb-2">
-            <input class="form-control" type="email" placeholder="Correo" [(ngModel)]="cliente.correo" name="correo"
-                required #correo="ngModel" [ngClass]="{'is-invalid': correo.invalid && correo.touched}">
-        </div>
+        
         <button type="submit" class="btn btn-primary me-2" [disabled]="formCliente.invalid">
             <mat-icon>{{editar? 'edit' : 'add'}}</mat-icon>
-            <!-- {{editar? 'Editar' : 'Agregar'}} -->
+            {{editar? 'Editar' : 'Agregar'}}
         </button>
-        <button type="button" class="btn btn-secondary" *ngIf="editar " (click)="editarClienteCancelar(formCliente)">
+        <button type="button" class="btn btn-secondary" *ngIf="editar" (click)="editarClienteCancelar(formCliente)">
             <mat-icon>close</mat-icon>
-            <!-- Cancelar -->
+            Cancelar
         </button>
     </form>
 
@@ -128,7 +131,7 @@
             </ng-container>
 
             <ng-container matColumnDef="acciones">
-                <th mat-header-cell *matHeaderCellDef>acciones</th>
+                <th mat-header-cell *matHeaderCellDef>Acciones</th>
                 <td mat-cell *matCellDef="let c">
                     <div class="d-flex gap-1">
                         <button class="btn btn-warning btn-sm me-1" (click)="editarCliente(c)">

@@ -1,37 +1,36 @@
 <mat-toolbar color="primary" class="topbar">
     <a mat-button class="brand" routerLink="/libros1">
         <mat-icon class="brand-logo" fontSet="material-icons-outlined" fontIcon="menu_book"></mat-icon>
-        <span class="brand-name" > Libreria ABC S.A</span>
+        <span class="brand-name"> Libreria ABC S.A</span>
     </a>
 
-    <a mat-button routerLink="/categorias" routerLink="active">
+    <a mat-button routerLink="/categorias" routerLinkActive="active">
         <mat-icon fontSet="material-icons-outlined">category</mat-icon>
         <span> Categorias</span>
     </a>
 
-    <a mat-button routerLink="/autores" routerLink="active">
+    <a mat-button routerLink="/autores" routerLinkActive="active">
         <mat-icon fontSet="material-icons-outlined">person</mat-icon>
         <span> Autores</span>
     </a>
 
-    <a mat-button routerLink="/cliente" routerLink="active">
+    <a mat-button routerLink="/clientes" routerLinkActive="active">
         <mat-icon fontSet="material-icons-outlined">groups</mat-icon>
         <span> Cliente</span>
     </a>
 
-    <a mat-button routerLink="/libros" routerLink="active">
+    <a mat-button routerLink="/libros" routerLinkActive="active">
         <mat-icon fontSet="material-icons-outlined">library_books</mat-icon>
         <span> Libro </span>
     </a>
     <span class="spacer"></span>
 
-    <a mat-stroked-button color="accent" routerLink="/carrito">
+    <a mat-stroked-button color="accent" routerLink="/carrito" routerLinkActive="active">
         <mat-icon fontSet="material-icons-outlined">shopping_cart</mat-icon>
         <span> Carrito</span>
     </a>
 
 </mat-toolbar>
-
 
 <div class="container mt-4">
   <h1>Libro</h1>
