@@ -362,11 +362,7 @@
             </button>
           </div>
           <div class="imagen-container" *ngIf="libro.portada || imagenPreview">
-            <img
-              [src]="'http://localhost:8080/' + imagenPreview || libro.portada"
-              alt="Portada del libro"
-              class="imagen-portada"
-            />
+            <img [src]="imagenPreview || ('http://localhost:8080/' + (libro.portada || 'portadas/noimage.png'))" />
           </div>
         </div>
       </form>

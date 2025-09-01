@@ -77,22 +77,43 @@ export class LibroComponent implements OnInit {
   }
 
   save(): void {
-    this.libroService.save(this.libro).subscribe(() => {
+  this.libroService.save(this.libro).subscribe({
+    next: () => {
       this.libro = {} as Libro;
+      this.imagenPreview = "";
       this.findAll();
-    });
-  }
+      Swal.fire('Éxito', 'Libro guardado correctamente', 'success');
+    },
+    error: (error) => {
+      console.error('Error al guardar libro:', error);
+      Swal.fire('Error', 'No se pudo guardar el libro', 'error');
+    }
+  });
+}
 
-  update(): void {
+update(): void {
   if (this.idEditar !== null) {
-    const idCategoria = this.libro.categoria.idCategoria;
-    const idAutor = this.libro.autor.idAutor;
+    const idCategoria = this.libro.categoria?.idCategoria;
+    const idAutor = this.libro.autor?.idAutor;
 
-    this.libroService.update(this.idEditar, idCategoria, idAutor, this.libro).subscribe(() => {
-      this.libro = {} as Libro;
-      this.editar = false;
-      this.idEditar = null;
-      this.findAll();
+    if (!idCategoria || !idAutor) {
+      Swal.fire('Error', 'Debe seleccionar autor y categoría', 'error');
+      return;
+    }
+
+    this.libroService.update(this.idEditar, idCategoria, idAutor, this.libro).subscribe({
+      next: () => {
+        this.libro = {} as Libro;
+        this.imagenPreview = "";
+        this.editar = false;
+        this.idEditar = null;
+        this.findAll();
+        Swal.fire('Éxito', 'Libro actualizado correctamente', 'success');
+      },
+      error: (error) => {
+        console.error('Error al actualizar libro:', error);
+        Swal.fire('Error', 'No se pudo actualizar el libro', 'error');
+      }
     });
   }
 }
@@ -136,16 +157,21 @@ export class LibroComponent implements OnInit {
     form.resetForm();
   }
 
-  guardarLibro(): void{
-    if(this.editar && this.idEditar!== null){
-      this.update();
-    } else{
-      this.save();
-    }
-
-    this.dialog.closeAll();
+  guardarLibro(): void {
+  // Verificar que se haya subido una imagen si es nuevo libro
+  if (!this.editar && !this.libro.portada) {
+    Swal.fire('Error', 'Debes subir una imagen para el libro', 'error');
+    return;
   }
 
+  if (this.editar && this.idEditar !== null) {
+    this.update();
+  } else {
+    this.save();
+  }
+
+  this.dialog.closeAll();
+}
   filtroLibro(event: Event): void{
     const filtro = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filtro.trim().toLowerCase();
@@ -180,23 +206,50 @@ export class LibroComponent implements OnInit {
     return c1 && c2 ? c1.idCategoria === c2.idCategoria : c1 === c2;
   }
 
-  onFileSelected(event: any){
-    this.selectedFile = event.target.files[0];
+  onFileSelected(event: any) {
+  this.selectedFile = event.target.files[0];
+  
+  if (this.selectedFile) {
+    // Crear preview inmediatamente
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imagenPreview = e.target.result;
+    };
+    reader.readAsDataURL(this.selectedFile);
+  }
+}
+
+  subirImagen(): void {
+  if (!this.selectedFile) {
+    Swal.fire('Error', 'Selecciona una imagen primero', 'error');
+    return;
   }
 
-  subirImagen(): void{
-    const formData = new FormData();
-    formData.append('file',this.selectedFile);
+  const formData = new FormData();
+  formData.append('file', this.selectedFile, this.selectedFile.name);
 
-    if(this.libro.portada){
-      formData.append('oldImage', this.libro.portada);
+  if (this.libro.portada) {
+    formData.append('oldImage', this.libro.portada);
+  }
+
+  this.http.post<{ruta: string}>('http://localhost:8080/api/upload-portada', formData).subscribe({
+    next: (res) => {
+      this.libro.portada = res.ruta;
+      // Crear preview de la imagen
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.imagenPreview = e.target.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+      
+      Swal.fire('Éxito', 'Imagen subida correctamente', 'success');
+    },
+    error: (error) => {
+      console.error('Error al subir imagen:', error);
+      Swal.fire('Error', 'No se pudo subir la imagen: ' + error.error?.error, 'error');
     }
-
-    this.http.post<{ruta: string}>('http://localhost:8080/api/upload-portada', formData).subscribe(res => {
-      this.libro.portada= res.ruta;
-      this.imagenPreview= res.ruta;
-     });
-  }
+  });
+}
 
   abrirModalDetalles(libro: Libro): void{
     this.libroSelecionado = libro;

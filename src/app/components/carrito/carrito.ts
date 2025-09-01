@@ -15,6 +15,7 @@ import { Factura } from '../../model/factura.model';
 export class CarritoComponent implements OnInit {
   carrito?: Carrito;
   displayed = ['titulo', 'precio', 'cantidad', 'total', 'acciones'];
+  dataSource: any[] = []; // ← AÑADIDO
   loading = false;
 
   constructor(
@@ -24,7 +25,7 @@ export class CarritoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+   this.reload();
   }
 
   reload() {
@@ -32,9 +33,13 @@ export class CarritoComponent implements OnInit {
     this.carritoService.get().subscribe({
       next: (c) => {
         this.carrito = c;
+        this.dataSource = c?.items || []; // ← ACTUALIZADO
         this.loading = false;
       },
-      error: (_) => (this.loading = false),
+      error: (_) => {
+        this.loading = false;
+        this.dataSource = []; // ← ACTUALIZADO
+      },
     });
   }
 
@@ -43,12 +48,13 @@ export class CarritoComponent implements OnInit {
     this.carritoService.updateItem(idItem, cantidad).subscribe({
       next: (c) => {
         this.carrito = c;
+        this.dataSource = c?.items || []; // ← ACTUALIZADO
         this.snack.open('Cantidad Actualizada', 'Ok', { duration: 1200 });
       },
       error: (err) =>
         Swal.fire(
           'Error',
-          err?.error?.mesasage || 'Nose pudo actualizar',
+          err?.error?.message || 'No se pudo actualizar', // ← Corregido "mesasage" a "message"
           'error'
         ),
     });
@@ -95,16 +101,14 @@ export class CarritoComponent implements OnInit {
         Swal.close();
         Swal.fire('!Compra Realizada',
                   `Factura: ${fac.numFactura}\nTotal: $${fac.total.toFixed(2)}`,
-                  `success`
+                  'success' // ← Corregido: comillas simples en lugar de backticks
         );
         this.reload();
       },
       error:(err: any) => {
         Swal.close();
-        Swal.fire('Error',err?.error?.mesasage || 'No se pudo procesar e checkout','error');
+        Swal.fire('Error', err?.error?.message || 'No se pudo procesar el checkout', 'error'); // ← Corregido
       }
-
     });
-
   }
 }

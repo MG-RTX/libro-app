@@ -9,7 +9,7 @@ import { Factura } from '../model/factura.model';
   providedIn: 'root',
 })
 export class GuesCheckoutService {
-  private base = `${enviroment.baseURL}/api/guest/checkout`;
+  private base = `${enviroment.baseURL}/guest/checkout`;
   constructor(private http: HttpClient) {}
   checkout(): Observable<Factura> {
     const params = new HttpParams().set('token', getCartToken());
