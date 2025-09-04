@@ -19,7 +19,6 @@ export class LibrosListComponent implements OnInit{
   constructor(private carritoService: GuestCarritoService,
               private libroService: LibroService,
             private snack: MatSnackBar){
-
               }
 
   ngOnInit(): void {
@@ -37,6 +36,4 @@ export class LibrosListComponent implements OnInit{
       error: err => Swal.fire('Error', err?.error?.message || 'No se pudo agregar','error')
      });
   }
-
-
 }

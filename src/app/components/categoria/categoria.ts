@@ -10,12 +10,10 @@ import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-categoria',
   standalone: false,
-
   templateUrl: './categoria.html',
   styleUrls: ['./categoria.css']
 })
 export class CategoriaComponent implements OnInit {
-
   categorias: Categoria[] = [];
   categoria: Categoria = {} as Categoria;
   editar: boolean = false;
